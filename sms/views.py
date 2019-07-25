@@ -39,6 +39,7 @@ class CaseInformationListAPI(APIView):
             name=json.loads(request.body)['name'],
             gender=json.loads(request.body)['gender'],
             age=json.loads(request.body)['age'],
+            is_pregnant=json.loads(request.body)['is_pregnant'],
             patient_contact=json.loads(request.body)['patient_contact'],
             disease_type=json.loads(request.body)['disease_type'],
             case_report_type=json.loads(request.body)['case_report_type'],
@@ -73,6 +74,7 @@ class CaseInformationDetailAPI(APIView):
         c.name = json.loads(request.body)['name']
         c.gender = json.loads(request.body)['gender']
         c.age = json.loads(request.body)['age']
+        c.is_pregnant = json.loads(request.body)['is_pregnant']
         c.patient_contact = json.loads(request.body)['patient_contact']
         c.disease_type = json.loads(request.body)['disease_type']
         c.case_report_type = json.loads(request.body)['case_report_type']
