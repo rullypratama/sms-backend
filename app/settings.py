@@ -30,6 +30,12 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.mailtrap.io')
+EMAIL_HOST_USER = os.getenv('EMAIL_USER', '360997c0fb32e2')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS', 'bac20aaff32da8')
+EMAIL_PORT = os.getenv('EMAIL_PORT', '2525')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', False)
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -164,3 +170,11 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Rabbit MQ
+QUEUE_SERVER = os.getenv('ORDER_QUEUE_SERVER', 'localhost:5672')
+QUEUE_USER = os.getenv('ORDER_QUEUE_USER', 'rabbituser')
+QUEUE_PASSWORD = os.getenv('ORDER_QUEUE_PASSWORD', 'rabbitpassword')
+
+EMAIL_NOTIF_QUEUE_NAME = os.getenv('EMAIL_NOTIF_QUEUE_NAME', 'emailnotifqueue')
