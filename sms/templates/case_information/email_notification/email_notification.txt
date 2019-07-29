@@ -1,0 +1,20 @@
+Case Information
+
+
+Case Information dari {{ reporter.health_facility }}
+
+Nama Pasien : {{ case_information.name }}
+Jenis Kelamin : {{ case_information.gender }}
+Usia : {{ case_information.age }}
+Kontak Pasien : {{ case_information.patient_contact }}
+Jenis Penyakit : {{ case_information.disease_type }}
+Tipe Kasus Laporan : {{ case_information.case_report_type }}
+Alamat : {{ case_information.address }}
+Sedang Mengandung? : {{ case_information.is_pregnant }}
+
+
+Terima kasih
+
+
+Kontak:
+- email : no-reply@garuda.com

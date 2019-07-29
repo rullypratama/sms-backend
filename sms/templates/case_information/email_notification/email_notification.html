@@ -1,0 +1,75 @@
+{% load static from staticfiles %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <title>Case Information</title>
+</head>
+<body style="font-family: 'Roboto', sans-serif;width: 100%;max-width: 600px;margin: 0 auto;padding: 0;">
+<div class="main">
+    <table class="content" cellpadding="10" style="padding: 10px 30px;width: 100%;">
+        <tr>
+            <td>
+{#                <a href="https://www.gramedia.com/" target="_blank" style="text-decoration: none;"><img class="content-logo" src="https://www.gramedia.com/assets/gramedia2.svg" style="width: 95px;"></a>#}
+            </td>
+        </tr>
+        <tr>
+            <td class="content-title">
+                <p style="margin: 0 auto;font-size: 18px;font-weight: bold;">Case Information</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="content-text">
+                <p style="margin: 0 auto;font-size: 15px;margin-bottom: 10px;font-weight: lighter;">&nbsp;</p>
+                <p style="margin: 0 auto;font-size: 15px;margin-bottom: 10px;font-weight: lighter;">Case Information dari {{ reporter.health_facility }}</p>
+                <p style="margin: 0 auto;font-size: 15px;margin-bottom: 10px;font-weight: lighter;">&nbsp;</p>
+                <p style="margin: 0 auto;font-size: 15px;margin-bottom: 10px;font-weight: lighter;">&nbsp;</p>
+                <p style="margin: 0 auto;font-size: 15px;margin-bottom: 10px;font-weight: lighter;">Nama Pasien : {{ case_information.name }}</p>
+                <p style="margin: 0 auto;font-size: 15px;margin-bottom: 10px;font-weight: lighter;">Jenis Kelamin : {{ case_information.gender }}</p>
+                <p style="margin: 0 auto;font-size: 15px;margin-bottom: 10px;font-weight: lighter;">Usia : {{ case_information.age }}</p>
+                <p style="margin: 0 auto;font-size: 15px;margin-bottom: 10px;font-weight: lighter;">Kontak Pasien : {{ case_information.patient_contact }}</p>
+                <p style="margin: 0 auto;font-size: 15px;margin-bottom: 10px;font-weight: lighter;">Jenis Penyakit : {{ case_information.disease_type }}</p>
+                <p style="margin: 0 auto;font-size: 15px;margin-bottom: 10px;font-weight: lighter;">Tipe Kasus Laporan : {{ case_information.case_report_type }}</p>
+                <p style="margin: 0 auto;font-size: 15px;margin-bottom: 10px;font-weight: lighter;">Alamat : {{ case_information.address }}</p>
+                <p style="margin: 0 auto;font-size: 15px;margin-bottom: 10px;font-weight: lighter;">Sedang Mengandung? : {{ case_information.is_pregnant }}</p>
+                <p style="margin: 0 auto;font-size: 15px;margin-bottom: 10px;font-weight: lighter;">&nbsp;</p>
+                <p style="margin: 0 auto;font-size: 15px;margin-bottom: 10px;font-weight: lighter;">&nbsp;</p>
+                <p style="margin: 0 auto;font-size: 15px;margin-bottom: 10px;font-weight: lighter;">Terima kasih</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="content-button" style="text-align: center;">
+{#                <a href="{{ base_url }}/order-history/{{ order.order_number }}" target="_blank" class="btn-pesanan" style="text-decoration: none;background-color: #008fda;padding: 11px 54px;text-align: center;display: inline-table;font-weight: bold;font-size: 16px;color: #ffffff;">Pesanan Saya</a>#}
+            </td>
+        </tr>
+    </table>
+    <table class="footer" style="text-align: center;margin: 0 auto;padding: 15px 0;width: 100%;background: #f6f6f6;">
+        <tr>
+            <td class="footer-text">
+                <p class="footer-text-title"
+                   style="margin: 0 auto;font-weight: lighter;font-size: 15px;line-height: 25px;">Kontak:</p>
+                <p style="margin: 0 auto;font-size: 15px;line-height: 25px;">no-reply@garuda.com</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+{#                <a href="https://www.facebook.com/gramediacom/" target="_blank" style="text-decoration: none;">#}
+{#                    <img class="social-icon" src="https://www.gramedia.com/assets/social-icon/facebook.png"#}
+{#                         style="width: 24px;height: 24px;margin: 0 3px;">#}
+{#                </a>#}
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
+</title>
+</head>
+<body>
+
+</body>
+</html>
