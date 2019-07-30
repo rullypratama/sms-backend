@@ -1,0 +1,56 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% load i18n %}
+{% block bodyclass %}admin-user{% endblock %}
+
+{% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/admin.css" %}"/>
+{% endblock %}
+
+{% block title %}
+    Order {{ user.id }} {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url "admin:index" %}">Home</a> &rsaquo;
+        <a href="{% url "admin:users_gramediauser_changelist" %}">Users</a>
+        &rsaquo;
+        <a href="{% url "admin:users_gramediauser_change" user.id %}">User {{ user.id }}</a>
+        &rsaquo; Detail
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div id="content-main">
+        <h1>User {{ user.first_name }} {{ user.last_name }}</h1>
+        <ul class="object-tools">
+            <li>
+{#                <a href="#" onclick="window.print();">Print order</a>#}
+            </li>
+        </ul>
+        <table>
+            <tr>
+                <th>Join Date</th>
+                <td>{{ user.date_joined }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ user.first_name }} {{ user.last_name }}</td>
+            </tr>
+            <tr>
+                <th>E-mail</th>
+                <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    <div id="content-related">
+        <div class="module" id="recent-actions-module">
+            <h2>{% trans 'Recent actions' %}</h2>
+
+        </div>
+    </div>
+{% endblock %}
