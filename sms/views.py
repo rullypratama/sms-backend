@@ -22,8 +22,8 @@ class CaseInformationListAPI(APIView):
         # get linked health facility
         linked_facility = HealthFacility.objects.filter(linked_facility=current_facility)
 
-        caseinformation = CaseInformation.objects.order_by('-created').filter(Q(user__health_facility=current_facility) |
-                                                         Q(user__health_facility__in=linked_facility))
+        caseinformation = CaseInformation.objects.filter(Q(user__health_facility=current_facility) |
+                                                         Q(user__health_facility__in=linked_facility)).order_by('-created')
 
         caseinformation = caseinformation[:100]
 
