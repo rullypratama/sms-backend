@@ -15,18 +15,20 @@ class CaseInformationListAPI(APIView):
     def get(self, request):
         """ Gets all the pending shipments in-house that haven't been shipped.
         """
-        caseinformation = CaseInformation.objects.all()
+        caseinformation = CaseInformation.objects.order_by('-created').all()
 
         caseinformation = caseinformation[:100]
 
         resp_json = []
         for c in caseinformation:
             resp_json.append({
+                'id': c.id,
                 'name': c.name,
                 'patientContact': c.patient_contact,
                 'diseaseType': c.disease_type,
                 'caseReportType': c.case_report_type,
                 'classificationCase': c.classification_case,
+                'created': c.created,
                 'href': request.build_absolute_uri(
                     reverse('case_information_details', kwargs={'pk': c.id})
                 ),
@@ -48,7 +50,7 @@ class CaseInformationListAPI(APIView):
             user=self.request.user
         )
         response = HttpResponse(status=HTTPStatus.CREATED)
-        response['Location'] = request.build_absolute_uri(caseinformation.get_absolute_url())
+        response['Location'] = caseinformation.pk
         return response
 
 
