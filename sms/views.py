@@ -22,7 +22,7 @@ class CaseInformationListAPI(APIView):
         # get linked health facility
         linked_facility = HealthFacility.objects.filter(linked_facility=current_facility)
 
-        caseinformation = CaseInformation.objects.filter(Q(user__health_facility=current_facility) |
+        caseinformation = CaseInformation.objects.order_by('-created').filter(Q(user__health_facility=current_facility) |
                                                          Q(user__health_facility__in=linked_facility))
 
         caseinformation = caseinformation[:100]
@@ -30,12 +30,14 @@ class CaseInformationListAPI(APIView):
         resp_json = []
         for c in caseinformation:
             resp_json.append({
+                'id': c.id,
                 'name': c.name,
                 'patientContact': c.patient_contact,
                 'diseaseType': c.get_disease_type_display(),
                 'caseReportType': c.get_case_report_type_display(),
                 'classificationCase': c.get_classification_case_display(),
                 'health_facility': c.user.health_facility.name if c.user.health_facility else '',
+                'created': c.created,
                 'href': request.build_absolute_uri(
                     reverse('case_information_details', kwargs={'pk': c.id})
                 ),
@@ -57,7 +59,7 @@ class CaseInformationListAPI(APIView):
             user=self.request.user
         )
         response = HttpResponse(status=HTTPStatus.CREATED)
-        response['Location'] = request.build_absolute_uri(caseinformation.get_absolute_url())
+        response['Location'] = caseinformation.pk
         return response
 
 
