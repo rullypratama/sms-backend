@@ -10,5 +10,6 @@ urlpatterns = [
     path('auth/', obtain_jwt_token, name='user-login'),
     path('', include('healthfacility.urls')),
     path('', include('sms.urls')),
+    path('', include('users.urls')),
 
 ]
