@@ -8,6 +8,7 @@ from rest_framework_jwt.serializers import JSONWebTokenSerializer
 from rest_framework_jwt.settings import api_settings
 from rest_framework_jwt.views import jwt_response_payload_handler
 from django.http import JsonResponse, HttpRequest, HttpResponse
+from rest_framework.permissions import IsAuthenticated
 
 from users.models import User
 
@@ -88,6 +89,7 @@ obtain_jwt_token = ObtainJSONWebToken.as_view()
 
 
 class UserDetailApi(APIView):
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         """ Get user detail based on request user.id
