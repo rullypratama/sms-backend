@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 from rest_framework_jwt.serializers import JSONWebTokenSerializer
 from rest_framework_jwt.settings import api_settings
 from rest_framework_jwt.views import jwt_response_payload_handler
+from django.http import JsonResponse, HttpRequest, HttpResponse
+from rest_framework.permissions import IsAuthenticated
 
 from users.models import User
 
@@ -41,9 +43,9 @@ class ObtainJSONWebToken(APIView):
         (Eg. admins get full serialization, others get basic serialization)
         """
         assert self.serializer_class is not None, (
-            "'%s' should either include a `serializer_class` attribute, "
-            "or override the `get_serializer_class()` method."
-            % self.__class__.__name__)
+                "'%s' should either include a `serializer_class` attribute, "
+                "or override the `get_serializer_class()` method."
+                % self.__class__.__name__)
         return self.serializer_class
 
     def get_serializer(self, *args, **kwargs):
@@ -84,3 +86,24 @@ class ObtainJSONWebToken(APIView):
 
 
 obtain_jwt_token = ObtainJSONWebToken.as_view()
+
+
+class UserDetailApi(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        """ Get user detail based on request user.id
+        """
+        user = User.objects.get(pk=request.user.pk)
+
+        resp_json = {
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'phone_number': user.phone_number,
+            'email': user.email,
+            'health_facility_name': user.health_facility.name,
+            'address': user.health_facility.address
+        }
+        return JsonResponse(resp_json, safe=False)
+
+
