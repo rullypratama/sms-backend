@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 
 from app import settings
+from healthfacility.models import HealthFacility
 from users.models import User
 
 
@@ -39,6 +40,13 @@ ACTIVE_CASE_DETECTION = 'acd'
 CASE_TYPES = (
     (PASSIVE_CASE_DETECTION, 'Passive Case Detection'),
     (ACTIVE_CASE_DETECTION, 'Active Case Detection'),
+)
+
+MESSAGE_TYPE_INBOX = 'inbox'
+MESSAGE_TYPE_SENTBOX = 'sentbox'
+MESSAGE_TYPES = (
+    (MESSAGE_TYPE_INBOX, 'Inbox'),
+    (MESSAGE_TYPE_SENTBOX, 'Sentbox'),
 )
 
 
@@ -89,6 +97,40 @@ class CaseInformation(models.Model):
         using = using or router.db_for_write(self.__class__, instance=self)
         self.is_active = False
         return self.save(using=using)
+
+
+class MessageInformation(models.Model):
+    case_information = models.ForeignKey(
+        CaseInformation,
+        on_delete=models.CASCADE,
+        related_name='case_information',
+        blank=True,
+        null=True
+    )
+    origin_facility = models.ForeignKey(
+        HealthFacility,
+        on_delete=models.SET_NULL,
+        related_name='origin_facility',
+        blank=True,
+        null=True
+    )
+    destination_facility = models.ForeignKey(
+        HealthFacility,
+        on_delete=models.SET_NULL,
+        related_name='destination_facility',
+        blank=True,
+        null=True
+    )
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    message_type = models.CharField(max_length=15, default=MESSAGE_TYPE_INBOX, choices=MESSAGE_TYPES)
+
+    def __str__(self):
+        return f'{self.message_type}'
+
+    class Meta:
+        db_table = 'message_information'
+        unique_together = ('case_information', 'origin_facility', 'destination_facility', 'message_type')
 
 
 @receiver(post_save, sender=CaseInformation)
