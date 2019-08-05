@@ -101,8 +101,8 @@ class UserDetailApi(APIView):
             'last_name': user.last_name,
             'phone_number': user.phone_number,
             'email': user.email,
-            'health_facility_name': user.health_facility.name,
-            'address': user.health_facility.address
+            'health_facility_name': user.health_facility.name if user.health_facility else '',
+            'address': user.health_facility.address if user.health_facility else ''
         }
         return JsonResponse(resp_json, safe=False)
 

@@ -8,38 +8,37 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from healthfacility.models import HealthFacility
-from sms.models import CaseInformation
+from sms.models import CaseInformation, MessageInformation, MESSAGE_TYPE_INBOX, MESSAGE_TYPE_SENTBOX
 
 
 class CaseInformationListAPI(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        """ Gets all case informations based on user's health facility and subs
+        """ Gets all case informations based on user's health facility
         """
         # get current health facility
         current_facility = self.request.user.health_facility
-        # get linked health facility
-        linked_facility = HealthFacility.objects.filter(linked_facility=current_facility)
 
-        caseinformation = CaseInformation.objects.filter(Q(user__health_facility=current_facility) |
-                                                         Q(user__health_facility__in=linked_facility)).order_by('-created')
-
-        caseinformation = caseinformation[:100]
+        messageinformation = MessageInformation.objects.filter(Q(origin_facility=current_facility) |
+                                                               Q(destination_facility=current_facility)
+                                                               ).order_by('-created')
+        messageinformation = messageinformation[:100]
 
         resp_json = []
-        for c in caseinformation:
+        for c in messageinformation:
             resp_json.append({
-                'id': c.id,
-                'name': c.name,
-                'patientContact': c.patient_contact,
-                'diseaseType': c.get_disease_type_display(),
-                'caseReportType': c.get_case_report_type_display(),
-                'classificationCase': c.get_classification_case_display(),
-                'health_facility': c.user.health_facility.name if c.user.health_facility else '',
-                'created': c.created,
+                'id': c.case_information.id,
+                'name': c.case_information.name,
+                'patientContact': c.case_information.patient_contact,
+                'diseaseType': c.case_information.get_disease_type_display(),
+                'caseReportType': c.case_information.get_case_report_type_display(),
+                'classificationCase': c.case_information.get_classification_case_display(),
+                'healthFacilityFrom': c.origin_facility.name,
+                'healthFacilityTo': c.destination_facility.name,
+                'created': c.case_information.created,
                 'href': request.build_absolute_uri(
-                    reverse('case_information_details', kwargs={'pk': c.id})
+                    reverse('case_information_details', kwargs={'pk': c.case_information.id})
                 ),
             })
 
@@ -57,6 +56,12 @@ class CaseInformationListAPI(APIView):
             classification_case=json.loads(request.body)['classification_case'],
             address=json.loads(request.body)['address'],
             user=self.request.user
+        )
+        MessageInformation.objects.create(
+            case_information=caseinformation,
+            origin_facility=self.request.user.health_facility if self.request.user.health_facility else '',
+            destination_facility=self.request.user.health_facility.linked_facility if self.request.user.health_facility else '',
+            message_type=MESSAGE_TYPE_INBOX
         )
         response = HttpResponse(status=HTTPStatus.CREATED)
         response['Location'] = caseinformation.pk
@@ -80,6 +85,15 @@ class CaseInformationDetailAPI(APIView):
             'reporter': f'{c.user.first_name} {c.user.last_name}'
         })
 
+    def post(self, request, pk):
+        MessageInformation.objects.create(
+            case_information=CaseInformation.objects.get(pk=pk),
+            origin_facility=self.request.user.health_facility if self.request.user.health_facility else '',
+            destination_facility=self.request.user.health_facility.linked_facility if self.request.user.health_facility else '',
+            message_type=MESSAGE_TYPE_SENTBOX
+        )
+        return HttpResponse(status=HTTPStatus.OK)
+
     def put(self, request, pk):
         c = CaseInformation.objects.get(pk=pk)
         c.name = json.loads(request.body)['name']
@@ -93,3 +107,69 @@ class CaseInformationDetailAPI(APIView):
         c.address = json.loads(request.body)['address']
         c.save()
         return HttpResponse(status=HTTPStatus.OK)
+
+
+class CaseInformationSentListAPI(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        """ Gets sent case informations based on user's health facility
+        """
+        # get current health facility
+        current_facility = self.request.user.health_facility
+
+        messageinformation = MessageInformation.objects.filter(origin_facility=current_facility).order_by('-created')
+
+        messageinformation = messageinformation[:100]
+
+        resp_json = []
+        for c in messageinformation:
+            resp_json.append({
+                'id': c.case_information.id,
+                'name': c.case_information.name,
+                'patientContact': c.case_information.patient_contact,
+                'diseaseType': c.case_information.get_disease_type_display(),
+                'caseReportType': c.case_information.get_case_report_type_display(),
+                'classificationCase': c.case_information.get_classification_case_display(),
+                'healthFacilityFrom': c.origin_facility.name,
+                'healthFacilityTo': c.destination_facility.name,
+                'created': c.case_information.created,
+                'href': request.build_absolute_uri(
+                    reverse('case_information_details', kwargs={'pk': c.case_information.id})
+                ),
+            })
+
+        return JsonResponse(resp_json, safe=False)
+
+
+class CaseInformationReceivedListAPI(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        """ Gets received case informations based on user's health facility
+        """
+        # get current health facility
+        current_facility = self.request.user.health_facility
+
+        messageinformation = MessageInformation.objects.filter(destination_facility=current_facility).order_by( '-created')
+
+        messageinformation = messageinformation[:100]
+
+        resp_json = []
+        for c in messageinformation:
+            resp_json.append({
+                'id': c.case_information.id,
+                'name': c.case_information.name,
+                'patientContact': c.case_information.patient_contact,
+                'diseaseType': c.case_information.get_disease_type_display(),
+                'caseReportType': c.case_information.get_case_report_type_display(),
+                'classificationCase': c.case_information.get_classification_case_display(),
+                'healthFacilityFrom': c.origin_facility.name,
+                'healthFacilityTo': c.destination_facility.name,
+                'created': c.case_information.created,
+                'href': request.build_absolute_uri(
+                    reverse('case_information_details', kwargs={'pk': c.case_information.id})
+                ),
+            })
+
+        return JsonResponse(resp_json, safe=False)

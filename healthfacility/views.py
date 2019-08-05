@@ -9,7 +9,7 @@ class HealthFacilityListAPI(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        """ Gets all the pending shipments in-house that haven't been shipped.
+        """ Gets all health facility exists.
         """
         healthfacility = HealthFacility.objects.all()
 
