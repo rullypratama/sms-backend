@@ -133,25 +133,26 @@ class MessageInformation(models.Model):
         unique_together = ('case_information', 'origin_facility', 'destination_facility', 'message_type')
 
 
-@receiver(post_save, sender=CaseInformation)
-def create_queue_message(sender, instance: CaseInformation, created, **kwargs):
-    if created:
-        notification_message = {
-            'name': instance.name,
-            'gender': f'{instance.get_gender_display()}',
-            'age': instance.age,
-            'patient_contact': instance.patient_contact,
-            'disease_type': f'{instance.get_disease_type_display()}',
-            'case_report_type': f'{instance.get_case_report_type_display()}',
-            'classification_case': f'{instance.get_classification_case_display()}',
-            'address': instance.address,
-            'is_pregnant': instance.is_pregnant,
-            'email': instance.user.email,
-            'code': instance.user.health_facility.code if instance.user.health_facility else ''
-        }
-        from kombu import Connection
-        conn_string = f'amqp://{settings.QUEUE_USER}:{settings.QUEUE_PASSWORD}@' \
-                      f'{settings.QUEUE_SERVER}//'
-        with Connection(conn_string) as conn:
-            queue = conn.SimpleQueue(settings.EMAIL_NOTIF_QUEUE_NAME)
-            queue.put(notification_message)
+# @receiver(post_save, sender=MessageInformation)
+# def create_queue_message(sender, instance: MessageInformation, created, **kwargs):
+#     if created:
+#         notification_message = {
+#             'name': instance.case_information.name,
+#             'gender': f'{instance.case_information.get_gender_display()}',
+#             'age': instance.case_information.age,
+#             'patient_contact': instance.case_information.patient_contact,
+#             'disease_type': f'{instance.case_information.get_disease_type_display()}',
+#             'case_report_type': f'{instance.case_information.get_case_report_type_display()}',
+#             'classification_case': f'{instance.case_information.get_classification_case_display()}',
+#             'address': instance.case_information.address,
+#             'is_pregnant': instance.case_information.is_pregnant,
+#             'email': instance.case_information.user.email,
+#             'from_facility_code': instance.origin_facility.code,
+#             'to_facility_code': instance.destination_facility.code
+#         }
+#         from kombu import Connection
+#         conn_string = f'amqp://{settings.QUEUE_USER}:{settings.QUEUE_PASSWORD}@' \
+#                       f'{settings.QUEUE_SERVER}//'
+#         with Connection(conn_string) as conn:
+#             queue = conn.SimpleQueue(settings.EMAIL_NOTIF_QUEUE_NAME)
+#             queue.put(notification_message)

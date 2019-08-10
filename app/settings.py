@@ -30,6 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.mailtrap.io')
 EMAIL_HOST_USER = os.getenv('EMAIL_USER', '360997c0fb32e2')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS', 'bac20aaff32da8')
