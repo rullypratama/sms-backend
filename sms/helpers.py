@@ -36,12 +36,12 @@ def send_notification_email(user: User, reporter: User, case_information):
 
     try:
         # log.info(f"Sending Email notification: {user}")
-
         email = EmailMultiAlternatives(
-            subject=f'Case Information from {reporter.health_facility.name} .',
+            subject=f'Case Information from {reporter.health_facility.name} #MI{case_information.get("mi")} #CI{case_information.get("ci")}',
             body=render_to_string('case_information/email_notification/email_notification.txt', content),
             from_email='no-reply@mail.garuda.com',
-            to=[user.email, ]
+            # to=[user.email, ]
+            to=['azharieazharou@gmail.com', 'rully.annihilator@gmail.com' ]
         )
 
         email.attach_alternative(
@@ -53,4 +53,5 @@ def send_notification_email(user: User, reporter: User, case_information):
         return email.send()
     except SMTPException as e:
         # log.error(f'Send Notification email failed : {str(e)}')
+        print(e)
         return 0

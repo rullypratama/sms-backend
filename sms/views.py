@@ -7,7 +7,7 @@ from django.urls import reverse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from healthfacility.models import HealthFacility
+from sms.helpers import send_notification_email
 from sms.models import CaseInformation, MessageInformation, MESSAGE_TYPE_INBOX, MESSAGE_TYPE_SENTBOX
 
 
@@ -45,7 +45,7 @@ class CaseInformationListAPI(APIView):
         return JsonResponse(resp_json, safe=False)
 
     def post(self, request: HttpRequest) -> HttpResponse:
-        caseinformation = CaseInformation.objects.create(
+        ci = CaseInformation.objects.create(
             name=json.loads(request.body)['name'],
             gender=json.loads(request.body)['gender'],
             age=json.loads(request.body)['age'],
@@ -57,14 +57,30 @@ class CaseInformationListAPI(APIView):
             address=json.loads(request.body)['address'],
             user=self.request.user
         )
-        MessageInformation.objects.create(
-            case_information=caseinformation,
+        mi = MessageInformation.objects.create(
+            case_information=ci,
             origin_facility=self.request.user.health_facility if self.request.user.health_facility else '',
             destination_facility=self.request.user.health_facility.linked_facility if self.request.user.health_facility else '',
             message_type=MESSAGE_TYPE_INBOX
         )
+
+        case_information = {
+            'mi': mi.pk,
+            'ci': ci.pk,
+            'name': ci.name,
+            'gender': f'{ci.get_gender_display()}',
+            'age': ci.age,
+            'patient_contact': ci.patient_contact,
+            'disease_type': f'{ci.get_disease_type_display()}',
+            'case_report_type': f'{ci.get_case_report_type_display()}',
+            'classification_case': f'{ci.get_classification_case_display()}',
+            'address': ci.address,
+            'is_pregnant': ci.is_pregnant,
+        }
+        send_notification_email(self.request.user, self.request.user, case_information)
+
         response = HttpResponse(status=HTTPStatus.CREATED)
-        response['Location'] = caseinformation.pk
+        response['Location'] = ci.pk
         return response
 
 
@@ -86,12 +102,27 @@ class CaseInformationDetailAPI(APIView):
         })
 
     def post(self, request, pk):
-        MessageInformation.objects.create(
-            case_information=CaseInformation.objects.get(pk=pk),
+        ci = CaseInformation.objects.get(pk=pk)
+        mi = MessageInformation.objects.create(
+            case_information=ci,
             origin_facility=self.request.user.health_facility if self.request.user.health_facility else '',
             destination_facility=self.request.user.health_facility.linked_facility if self.request.user.health_facility else '',
             message_type=MESSAGE_TYPE_SENTBOX
         )
+        case_information = {
+            'mi': mi.pk,
+            'ci': ci.pk,
+            'name': ci.name,
+            'gender': f'{ci.get_gender_display()}',
+            'age': ci.age,
+            'patient_contact': ci.patient_contact,
+            'disease_type': f'{ci.get_disease_type_display()}',
+            'case_report_type': f'{ci.get_case_report_type_display()}',
+            'classification_case': f'{ci.get_classification_case_display()}',
+            'address': ci.address,
+            'is_pregnant': ci.is_pregnant,
+        }
+        send_notification_email(self.request.user, self.request.user, case_information)
         return HttpResponse(status=HTTPStatus.OK)
 
     def put(self, request, pk):
