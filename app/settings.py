@@ -27,7 +27,13 @@ SECRET_KEY = 'qfx)6_($go5ajvq)nxsf(0lp+aon^$*y1&w@ax%@^60labqcps'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+DOMAIN_NAME = os.getenv('DOMAIN_NAME', 'ec2-18-220-20-1.us-east-2.compute.amazonaws.com')
+
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    DOMAIN_NAME,
+]
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -171,7 +177,7 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Rabbit MQ
 QUEUE_SERVER = os.getenv('ORDER_QUEUE_SERVER', 'localhost:5672')
