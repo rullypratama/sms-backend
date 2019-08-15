@@ -27,7 +27,7 @@ SECRET_KEY = 'qfx)6_($go5ajvq)nxsf(0lp+aon^$*y1&w@ax%@^60labqcps'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-DOMAIN_NAME = os.getenv('DOMAIN_NAME', 'ec2-18-220-20-1.us-east-2.compute.amazonaws.com')
+DOMAIN_NAME = os.getenv('DOMAIN_NAME', '')
 
 ALLOWED_HOSTS = [
     'localhost',
