@@ -62,7 +62,7 @@ class CaseInformation(models.Model):
 
     disease_type = models.CharField(max_length=15, default=DISEASE_TYPE_PF, choices=DISEASE_TYPES)
     case_report_type = models.CharField(max_length=15, default=PASSIVE_CASE_DETECTION, choices=CASE_TYPES)
-    classification_case = models.CharField(max_length=15, default=IMPORTED_CASE, choices=CLASSIFICATION_TYPES)
+    classification_case = models.CharField(max_length=15, blank=True,  choices=CLASSIFICATION_TYPES)
 
     address = models.CharField(max_length=255, blank=True, null=True)
     latitude = models.DecimalField(max_digits=15, decimal_places=9, default=0)
