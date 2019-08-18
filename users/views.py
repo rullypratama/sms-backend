@@ -102,7 +102,8 @@ class UserDetailApi(APIView):
             'phone_number': user.phone_number,
             'email': user.email,
             'health_facility_name': user.health_facility.name if user.health_facility else '',
-            'address': user.health_facility.address if user.health_facility else ''
+            'address': user.health_facility.address if user.health_facility else '',
+            'health_facility_level': user.health_facility.facility_level if user.health_facility else '',
         }
         return JsonResponse(resp_json, safe=False)
 
