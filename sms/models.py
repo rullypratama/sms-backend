@@ -10,11 +10,9 @@ from users.models import User
 
 GENDER_TYPE_MEN = '1'
 GENDER_TYPE_WOMEN = '2'
-GENDER_TYPE_OTHERS = '3'
 GENDER_TYPES = (
-    (GENDER_TYPE_MEN, 'Men'),
-    (GENDER_TYPE_WOMEN, 'Women'),
-    (GENDER_TYPE_OTHERS, 'Others')
+    (GENDER_TYPE_MEN, 'Pria'),
+    (GENDER_TYPE_WOMEN, 'Wanita')
 )
 
 DISEASE_TYPE_PF = 'pf'
@@ -56,7 +54,7 @@ class CaseInformation(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
-    gender = models.CharField(max_length=15, default=GENDER_TYPE_OTHERS, choices=GENDER_TYPES)
+    gender = models.CharField(max_length=15, blank=True, choices=GENDER_TYPES)
     age = models.IntegerField(null=True, blank=True)
     patient_contact = models.CharField(max_length=16, null=True, blank=True)
 
