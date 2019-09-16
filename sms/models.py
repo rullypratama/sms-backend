@@ -5,6 +5,8 @@ from django.urls import reverse
 
 from app import settings
 from healthfacility.models import HealthFacility
+from masterdata.models import Province, City, District, SubDistrict
+from sms.helpers import send_notification_email
 from users.models import User
 
 
@@ -72,6 +74,38 @@ class CaseInformation(models.Model):
         User,
         on_delete=models.SET_NULL,
         related_name='user',
+        blank=True,
+        null=True
+    )
+
+    province = models.ForeignKey(
+        Province,
+        on_delete=models.SET_NULL,
+        related_name='province_info',
+        blank=True,
+        null=True
+    )
+
+    city = models.ForeignKey(
+        City,
+        on_delete=models.SET_NULL,
+        related_name='city_info',
+        blank=True,
+        null=True
+    )
+
+    district = models.ForeignKey(
+        District,
+        on_delete=models.SET_NULL,
+        related_name='district_info',
+        blank=True,
+        null=True
+    )
+
+    sub_district = models.ForeignKey(
+        SubDistrict,
+        on_delete=models.SET_NULL,
+        related_name='sub_district_info',
         blank=True,
         null=True
     )
@@ -154,3 +188,26 @@ class MessageInformation(models.Model):
 #         with Connection(conn_string) as conn:
 #             queue = conn.SimpleQueue(settings.EMAIL_NOTIF_QUEUE_NAME)
 #             queue.put(notification_message)
+
+
+@receiver(post_save, sender=MessageInformation)
+def create_message(sender, instance: MessageInformation, created, **kwargs):
+    if created:
+        case_information = {
+            'mi': instance.pk,
+            'ci': instance.case_information.pk,
+            'name': instance.case_information.name,
+            'gender': f'{instance.case_information.get_gender_display()}',
+            'age': instance.case_information.age,
+            'patient_contact': instance.case_information.patient_contact,
+            'disease_type': f'{instance.case_information.get_disease_type_display()}',
+            'case_report_type': f'{instance.case_information.get_case_report_type_display()}',
+            'classification_case': f'{instance.case_information.get_classification_case_display()}',
+            'address': instance.case_information.address,
+            'province': instance.case_information.province.name,
+            'city': instance.case_information.city.name,
+            'district': instance.case_information.district.name,
+            'sub_district': instance.case_information.sub_district.name,
+            'is_pregnant': instance.case_information.is_pregnant,
+        }
+        send_notification_email(instance.case_information.user, instance.destination_facility, case_information)

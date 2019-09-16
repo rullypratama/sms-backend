@@ -1,6 +1,7 @@
 from django.db import models, router
 from django.urls import reverse
 
+from masterdata.models import Province, City, District, SubDistrict
 
 HEALTHFACILITY_TYPE_DISTRICT = '3'
 HEALTHFACILITY_TYPE_HEALTH_CENTER = '2'
@@ -25,6 +26,38 @@ class HealthFacility(models.Model):
     address = models.CharField(max_length=255, blank=True, null=True)
     latitude = models.DecimalField(max_digits=15, decimal_places=9, default=0)
     longitude = models.DecimalField(max_digits=15, decimal_places=9, default=0)
+
+    province = models.ForeignKey(
+        Province,
+        on_delete=models.SET_NULL,
+        related_name='province_facility',
+        blank=True,
+        null=True
+    )
+
+    city = models.ForeignKey(
+        City,
+        on_delete=models.SET_NULL,
+        related_name='city_facility',
+        blank=True,
+        null=True
+    )
+
+    district = models.ForeignKey(
+        District,
+        on_delete=models.SET_NULL,
+        related_name='district_facility',
+        blank=True,
+        null=True
+    )
+
+    sub_district = models.ForeignKey(
+        SubDistrict,
+        on_delete=models.SET_NULL,
+        related_name='sub_district_facility',
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return f'{self.name} - {self.code}'

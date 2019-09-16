@@ -1,0 +1,231 @@
+- model: masterdata.province
+  pk: 1
+  fields:
+    name: Maluku
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+- model: masterdata.city
+  pk: 1
+  fields:
+    name: Ambon
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    province_id: 1
+- model: masterdata.district
+  pk: 1
+  fields:
+    name: Nusaniwe
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    city_id: 1
+- model: masterdata.district
+  pk: 2
+  fields:
+    name: Sirimau
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    city_id: 1
+- model: masterdata.district
+  pk: 3
+  fields:
+    name: Teluk Ambon
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    city_id: 1
+- model: masterdata.district
+  pk: 4
+  fields:
+    name: Baguala
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    city_id: 1
+- model: masterdata.district
+  pk: 5
+  fields:
+    name: Leitimur
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    city_id: 1
+- model: masterdata.subdistrict
+  pk: 1
+  fields:
+    name: Ds. Latuhalat
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 1
+- model: masterdata.subdistrict
+  pk: 2
+  fields:
+    name: Kel. Waihaong
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 1
+- model: masterdata.subdistrict
+  pk: 3
+  fields:
+    name: Kel. Nusaniwe
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 1
+- model: masterdata.subdistrict
+  pk: 4
+  fields:
+    name: Kel. Benteng
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 1
+- model: masterdata.subdistrict
+  pk: 5
+  fields:
+    name: Ds. Amahusu
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 1
+- model: masterdata.subdistrict
+  pk: 6
+  fields:
+    name: Ds. Urimesing
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 1
+- model: masterdata.subdistrict
+  pk: 7
+  fields:
+    name: Kel. Rijali
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 2
+- model: masterdata.subdistrict
+  pk: 8
+  fields:
+    name: Kel. Ahusen
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 2
+- model: masterdata.subdistrict
+  pk: 9
+  fields:
+    name: Ds. Soya
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 2
+- model: masterdata.subdistrict
+  pk: 10
+  fields:
+    name: Kel. Amatelu
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 2
+- model: masterdata.subdistrict
+  pk: 11
+  fields:
+    name: Ds. Hative Kecil
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 2
+- model: masterdata.subdistrict
+  pk: 12
+  fields:
+    name: Kel. Karang Panjang
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 2
+- model: masterdata.subdistrict
+  pk: 13
+  fields:
+    name: Kel. Waihoka
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 2
+- model: masterdata.subdistrict
+  pk: 14
+  fields:
+    name: Ds. Batu Merah
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 2
+- model: masterdata.subdistrict
+  pk: 15
+  fields:
+    name: Ds. Tawiri
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 3
+- model: masterdata.subdistrict
+  pk: 16
+  fields:
+    name: Ds. Rumah Tiga
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 3
+- model: masterdata.subdistrict
+  pk: 17
+  fields:
+    name: Ds. Nania
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 4
+- model: masterdata.subdistrict
+  pk: 18
+  fields:
+    name: Kel. Lateri
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 4
+- model: masterdata.subdistrict
+  pk: 19
+  fields:
+    name: Ds. Halong
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 4
+- model: masterdata.subdistrict
+  pk: 20
+  fields:
+    name: Ds. Passo
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 4
+- model: masterdata.subdistrict
+  pk: 21
+  fields:
+    name: Ds. Hutumuri
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 5
+- model: masterdata.subdistrict
+  pk: 22
+  fields:
+    name: Ds. Kilang
+    created: 2017-09-02 04:20:17.895780+00:00
+    code:
+    is_active: 1
+    district_id: 5
