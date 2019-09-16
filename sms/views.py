@@ -69,14 +69,18 @@ class CaseInformationListAPI(APIView):
             message_type=MESSAGE_TYPE_INBOX
         )
 
-        check_other_hf = HealthFacility.objects.filter(sub_district_id=json.loads(request.body)['sub_district'])
-        for other_mi in check_other_hf:
-            MessageInformation.objects.create(
-                case_information=ci,
-                origin_facility=self.request.user.health_facility if self.request.user.health_facility else '',
-                destination_facility=other_mi,
-                message_type=MESSAGE_TYPE_INBOX
-            )
+        patient_sub_district_id = json.loads(request.body)['sub_district']
+        origin_sub_district_id = self.request.user.health_facility.sub_district_id if self.request.user.health_facility else '',
+
+        if patient_sub_district_id != origin_sub_district_id[0]:
+            check_other_hf = HealthFacility.objects.filter(sub_district_id=patient_sub_district_id)
+            for other_mi in check_other_hf:
+                MessageInformation.objects.create(
+                    case_information=ci,
+                    origin_facility=self.request.user.health_facility if self.request.user.health_facility else '',
+                    destination_facility=other_mi,
+                    message_type=MESSAGE_TYPE_INBOX
+                )
 
 
         # case_information = {
