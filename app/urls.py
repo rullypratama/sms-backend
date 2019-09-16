@@ -11,5 +11,6 @@ urlpatterns = [
     path('', include('healthfacility.urls')),
     path('', include('sms.urls')),
     path('', include('users.urls')),
+    path('', include('masterdata.urls')),
 
 ]

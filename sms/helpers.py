@@ -3,10 +3,11 @@ from smtplib import SMTPException
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
+from healthfacility.models import HealthFacility
 from users.models import User
 
 
-def send_notification_email(user: User, reporter: User, case_information):
+def send_notification_email(user: User, dest: HealthFacility, case_information):
     """ Send Email Notification
 
     :param user: User object
@@ -14,12 +15,12 @@ def send_notification_email(user: User, reporter: User, case_information):
     """
 
     content = {
-        'user': {
-            'name': f'{user.first_name} {user.last_name}'
-        },
         'reporter': {
-            'name': f'{reporter.first_name} {reporter.last_name}',
-            'health_facility': reporter.health_facility.name
+            'name': f'{user.first_name} {user.last_name}',
+            'health_facility': user.health_facility.name
+        },
+        'destination': {
+            'health_facility': dest.name
         },
         'case_information': {
             'name': case_information.get('name'),
@@ -30,6 +31,10 @@ def send_notification_email(user: User, reporter: User, case_information):
             'case_report_type': case_information.get('case_report_type'),
             'classification_case': case_information.get('classification_case'),
             'address': case_information.get('address'),
+            'province': case_information.get('province'),
+            'city': case_information.get('city'),
+            'district': case_information.get('district'),
+            'sub_district': case_information.get('sub_district'),
             'is_pregnant': case_information.get('is_pregnant')
         }
     }
@@ -37,7 +42,7 @@ def send_notification_email(user: User, reporter: User, case_information):
     try:
         # log.info(f"Sending Email notification: {user}")
         email = EmailMultiAlternatives(
-            subject=f'Case Information from {reporter.health_facility.name} #MI{case_information.get("mi")} #CI{case_information.get("ci")}',
+            subject=f'Case Information from {user.health_facility.name} #MI{case_information.get("mi")} #CI{case_information.get("ci")}',
             body=render_to_string('case_information/email_notification/email_notification.txt', content),
             from_email='no-reply@mail.garuda.com',
             # to=[user.email, ]

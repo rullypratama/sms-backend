@@ -1,4 +1,4 @@
-Case Information
+Case Information untuk {{ destination.health_facility }}
 
 
 Case Information dari {{ reporter.health_facility }}
@@ -10,6 +10,10 @@ Kontak Pasien : {{ case_information.patient_contact }}
 Jenis Penyakit : {{ case_information.disease_type }}
 Tipe Kasus Laporan : {{ case_information.case_report_type }}
 Alamat : {{ case_information.address }}
+Provinsi : {{ case_information.province }}
+Kota : {{ case_information.city }}
+Kecamatan : {{ case_information.district }}
+Kelurahan : {{ case_information.sub_district }}
 Sedang Mengandung? : {{ case_information.is_pregnant }}
 
 

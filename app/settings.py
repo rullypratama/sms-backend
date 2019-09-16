@@ -58,7 +58,8 @@ INSTALLED_APPS = [
     'healthfacility',
     'users',
     'sms',
-    'utils'
+    'utils',
+    'masterdata'
 ]
 
 MIDDLEWARE = [
