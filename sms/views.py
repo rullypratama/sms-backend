@@ -70,9 +70,9 @@ class CaseInformationListAPI(APIView):
         )
 
         patient_sub_district_id = json.loads(request.body)['sub_district']
-        origin_sub_district_id = self.request.user.health_facility.sub_district_id if self.request.user.health_facility else '',
+        origin_sub_district_id = self.request.user.health_facility.sub_district_id if self.request.user.health_facility else ''
 
-        if patient_sub_district_id != origin_sub_district_id[0]:
+        if patient_sub_district_id != origin_sub_district_id:
             check_other_hf = HealthFacility.objects.filter(sub_district_id=patient_sub_district_id)
             for other_mi in check_other_hf:
                 MessageInformation.objects.create(
