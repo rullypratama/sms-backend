@@ -7,6 +7,7 @@ from django.urls import reverse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
+from healthfacility.models import HealthFacility
 from sms.helpers import send_notification_email
 from sms.models import CaseInformation, MessageInformation, MESSAGE_TYPE_INBOX, MESSAGE_TYPE_SENTBOX
 
@@ -55,29 +56,47 @@ class CaseInformationListAPI(APIView):
             case_report_type=json.loads(request.body)['case_report_type'],
             classification_case=json.loads(request.body)['classification_case'],
             address=json.loads(request.body)['address'],
+            province_id=json.loads(request.body)['province'],
+            city_id=json.loads(request.body)['city'],
+            district_id=json.loads(request.body)['district'],
+            sub_district_id=json.loads(request.body)['sub_district'],
             user=self.request.user
         )
-        mi = MessageInformation.objects.create(
+        MessageInformation.objects.create(
             case_information=ci,
             origin_facility=self.request.user.health_facility if self.request.user.health_facility else '',
             destination_facility=self.request.user.health_facility.linked_facility if self.request.user.health_facility else '',
             message_type=MESSAGE_TYPE_INBOX
         )
 
-        case_information = {
-            'mi': mi.pk,
-            'ci': ci.pk,
-            'name': ci.name,
-            'gender': f'{ci.get_gender_display()}',
-            'age': ci.age,
-            'patient_contact': ci.patient_contact,
-            'disease_type': f'{ci.get_disease_type_display()}',
-            'case_report_type': f'{ci.get_case_report_type_display()}',
-            'classification_case': f'{ci.get_classification_case_display()}',
-            'address': ci.address,
-            'is_pregnant': ci.is_pregnant,
-        }
-        send_notification_email(self.request.user, self.request.user, case_information)
+        patient_sub_district_id = json.loads(request.body)['sub_district']
+        origin_sub_district_id = self.request.user.health_facility.sub_district_id if self.request.user.health_facility else ''
+
+        if patient_sub_district_id != origin_sub_district_id:
+            check_other_hf = HealthFacility.objects.filter(sub_district_id=patient_sub_district_id)
+            for other_mi in check_other_hf:
+                MessageInformation.objects.create(
+                    case_information=ci,
+                    origin_facility=self.request.user.health_facility if self.request.user.health_facility else '',
+                    destination_facility=other_mi,
+                    message_type=MESSAGE_TYPE_INBOX
+                )
+
+
+        # case_information = {
+        #     'mi': mi.pk,
+        #     'ci': ci.pk,
+        #     'name': ci.name,
+        #     'gender': f'{ci.get_gender_display()}',
+        #     'age': ci.age,
+        #     'patient_contact': ci.patient_contact,
+        #     'disease_type': f'{ci.get_disease_type_display()}',
+        #     'case_report_type': f'{ci.get_case_report_type_display()}',
+        #     'classification_case': f'{ci.get_classification_case_display()}',
+        #     'address': ci.address,
+        #     'is_pregnant': ci.is_pregnant,
+        # }
+        # send_notification_email(self.request.user, self.request.user, case_information)
 
         response = HttpResponse(status=HTTPStatus.CREATED)
         response['Location'] = ci.pk
