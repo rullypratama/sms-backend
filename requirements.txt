@@ -3,7 +3,7 @@ python-jose==2.0.2
 factory-boy==2.10.0
 psycopg2-binary
 kombu==4.1.0
-pyyaml==3.12
+pyyaml==5.4
 
 djangorestframework==3.7.7
 djangorestframework-jwt==1.10.0
